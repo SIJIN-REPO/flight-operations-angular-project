@@ -1,10 +1,10 @@
 <div class="app-shell">
   <header class="topbar">
     <div class="brand-lockup"><div class="brand-mark" aria-hidden="true">✈</div><div><p class="eyebrow">AEROSCOPE / OPS CONTROL</p><h1>Flight operations</h1></div></div>
-    <div class="topbar-actions"><div class="live-indicator"><span></span> Live data</div><div class="last-sync">Last sync <strong>09:42:18 UTC</strong></div><button class="icon-button" type="button" aria-label="Open notifications">♧<span class="notification-dot"></span></button><div class="avatar" aria-label="Signed in as Alex Morgan">AM</div></div>
+    <div class="topbar-actions"><div class="live-indicator"><span></span> Live data</div><div class="last-sync">Current UTC <strong>{{ currentTimeLabel }}</strong></div><button class="icon-button" type="button" aria-label="Open notifications">♧<span class="notification-dot"></span></button><div class="avatar" aria-label="Signed in as Alex Morgan">AM</div></div>
   </header>
   <main class="workspace">
-    <section class="intro-row"><div><p class="eyebrow accent">FRIDAY, 14 JUNE 2024</p><h2>Good morning, Alex<span>.</span></h2><p class="muted">Global flight activity across your network.</p></div><button class="export-button" type="button"><span>⇩</span> Export report</button></section>
+    <section class="intro-row"><div><p class="eyebrow accent">{{ currentDateLabel }}</p><h2>Good morning, Alex<span>.</span></h2><p class="muted">Global flight activity across your network.</p></div><button class="export-button" type="button"><span>⇩</span> Export report</button></section>
     <section class="kpi-grid" aria-label="Flight metrics">
       <article class="kpi-card"><div class="kpi-icon blue">◎</div><div><span class="kpi-label">Total flights</span><strong>{{ flights.length }}</strong><small class="trend positive">↑ 8.4% <em>vs yesterday</em></small></div></article>
       <article class="kpi-card"><div class="kpi-icon amber">↗</div><div><span class="kpi-label">Active flights</span><strong>{{ activeFlights }}</strong><small class="trend positive">↑ 3.1% <em>vs yesterday</em></small></div></article>

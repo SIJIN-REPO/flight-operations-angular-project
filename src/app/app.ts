@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import * as L from 'leaflet';
-import { Subject, takeUntil } from 'rxjs';
+import { interval, Subject, takeUntil } from 'rxjs';
 import { Flight, FlightStatus } from './flight.model';
 import { FlightService } from './flight.service';
 
@@ -17,6 +17,7 @@ export class App implements AfterViewInit, OnDestroy {
   readonly filterForm;
   filteredFlights: Flight[];
   selectedFlight: Flight;
+  currentTime = new Date();
   map?: L.Map;
   private routeLine?: L.Polyline;
   private markers: L.Marker[] = [];
@@ -28,6 +29,9 @@ export class App implements AfterViewInit, OnDestroy {
     this.filterForm = this.formBuilder.nonNullable.group({ search: '', status: 'All', origin: 'All', destination: 'All' });
     this.filteredFlights = this.flights;
     this.selectedFlight = this.flights[0];
+    interval(1000).pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.currentTime = new Date();
+    });
     this.filterForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.filteredFlights = this.applyFilters();
       if (!this.filteredFlights.some((flight) => flight.id === this.selectedFlight.id)) this.selectedFlight = this.filteredFlights[0] ?? this.flights[0];
@@ -62,6 +66,8 @@ export class App implements AfterViewInit, OnDestroy {
   get arrivedFlights(): number { return this.flights.filter((flight) => flight.status === 'Arrived').length; }
   get origins(): string[] { return [...new Set(this.flights.map((flight) => flight.origin.code))].sort(); }
   get destinations(): string[] { return [...new Set(this.flights.map((flight) => flight.destination.code))].sort(); }
+  get currentDateLabel(): string { return new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(this.currentTime).toUpperCase(); }
+  get currentTimeLabel(): string { return `${new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'UTC' }).format(this.currentTime)} UTC`; }
 
   private applyFilters(): Flight[] {
     const { search, status, origin, destination } = this.filterForm.getRawValue();
